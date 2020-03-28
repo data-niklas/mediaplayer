@@ -37,6 +37,7 @@ player.play
 sleep 10
 player.stop
 ```
+
 <br>
 Event handling:<br>
 ```
