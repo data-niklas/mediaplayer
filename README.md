@@ -37,15 +37,16 @@ player.play
 sleep 10
 player.stop
 ```
-
 <br>
 Event handling:<br>
+
 ```
 player.on LibVlc::Event::MediaPlayerEndReached, LibVlc::Callback.new{ |event_data, user_data|
   puts "Song finished"
   WrappingModule.call_finish_function(event_data, user_data)
 }
 ```
+
 <br>
 Due to the callback being passed to the c library, variables cannot be accessed in the callback.<br>
 One of the easiest methods to use the callback, is to call a function in a wrapping module with the variables in the callback.<br>
