@@ -9,7 +9,7 @@ TODO: Write a description here
    ```yaml
    dependencies:
      mediaplayer:
-       github: your-github-user/mediaplayer
+       github: data-niklas/mediaplayer
    ```
 
 2. Run `shards install`
