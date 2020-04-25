@@ -4,6 +4,18 @@ module Player
     @@instance = Instance.new 0, nil
 
     alias Event = LibVlc::Event
+    alias Callback = LibVlc::Callback
+    alias State = LibVlc::State
+    alias MediaType = LibVlc::MediaType
+    alias TrackType = LibVlc::TrackType
+    alias PlaybackMode = LibVlc::PlaybackMode
+    alias Meta = LibVlc::Meta
+    alias MediaParsedStatus = LibVlc::MediaParsedStatus
+    alias PictureType = LibVlc::PictureType
+    alias Role = LibVlc::Role
+    alias MediaParseFlag = LibVlc::MediaParseFlag
+    alias SlaveType = LibVlc::SlaveType
+    alias ThumbnailSeekSpeed = LibVlc::ThumbnailSeekSpeed
 
     def self.instance
         @@instance
@@ -66,6 +78,10 @@ module Player
             LibVlc.get_media_parsed_status @obj
         end
 
+        def parse(options : LibVlc::MediaParseFlag = LibVLc::MediaParseFlag::ParseLocal, timeout = 0)
+            LibVlc.parse_media_with_options @obj, options, timeout
+        end
+
         def stats : LibVlc::MediaStats*
             stats = LibVlc::MediaStats.new
             LibVlc.get_media_statistics(@obj,pointerof(stats))
@@ -104,6 +120,31 @@ module Player
 
         def finalize
             LibVlc.free_media @obj
+        end
+
+        #############Events#####################
+
+        def on(event : LibVlc::Event, proc : LibVlc::Callback, user_data = nil)
+    
+            mng = LibVlc.get_media_event_manager @obj
+            LibVlc.attach_event(mng, event, proc, user_data)
+            # end
+            proc
+        end
+
+        def on(event : LibVlc::Event, user_data = nil, &block : LibVlc::EventData*, Void* -> Nil)
+            on(event, block, user_data)
+        end
+
+        def off(event : LibVlc::Event, proc : LibVlc::Callback, user_data = nil)
+            mng = LibVlc.get_media_event_manager @obj
+            LibVlc.detach_event(mng, event, proc, user_data)
+            # end
+            proc
+        end
+
+        def off(event : LibVlc::Event, user_data = nil, &block : LibVlc::EventData*, Void* -> Nil)
+            off(event, block, user_data)
         end
     end
 
@@ -198,6 +239,32 @@ module Player
 
         def finalize
             LibVlc.free_media_list @obj
+        end
+
+
+        #############Events#####################
+
+        def on(event : LibVlc::Event, proc : LibVlc::Callback, user_data = nil)
+            
+            mng = LibVlc.get_media_list_event_manager @obj
+            LibVlc.attach_event(mng, event, proc, user_data)
+           # end
+            proc
+        end
+
+        def on(event : LibVlc::Event, user_data = nil, &block : LibVlc::EventData*, Void* -> Nil)
+            on(event, block, user_data)
+        end
+
+        def off(event : LibVlc::Event, proc : LibVlc::Callback, user_data = nil)
+            mng = LibVlc.get_media_list_event_manager @obj
+            LibVlc.detach_event(mng, event, proc, user_data)
+           # end
+            proc
+        end
+
+        def off(event : LibVlc::Event, user_data = nil, &block : LibVlc::EventData*, Void* -> Nil)
+            off(event, block, user_data)
         end
     end
 
