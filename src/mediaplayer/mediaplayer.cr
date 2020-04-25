@@ -3,6 +3,8 @@ require "vlc"
 module Player
     @@instance = Instance.new 0, nil
 
+    alias Event = LibVlc::Event
+
     def self.instance
         @@instance
     end
