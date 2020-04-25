@@ -207,13 +207,14 @@ module Player
 
         property obj, mode, media, equalizer : Equalizer
         getter obj, mode, equalizer
-        def initialize(@media, mode : MediaPlayerMode = MediaPlayerMode::Multiple)
+        @media : Nil | MediaList | Media = nil
+        def initialize(media, mode : MediaPlayerMode = MediaPlayerMode::Multiple)
             initialize(mode)
+            set media
         end
 
         def initialize(mode : MediaPlayerMode = MediaPlayerMode::Multiple)
             @mode = mode
-            @media = nil
             @equalizer = Equalizer.new
             if @mode == MediaPlayerMode::Single
                 @obj = LibVlc.new_media_player Player.instance.obj
