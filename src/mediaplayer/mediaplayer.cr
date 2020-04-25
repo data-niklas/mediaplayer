@@ -78,7 +78,7 @@ module Player
             LibVlc.get_media_parsed_status @obj
         end
 
-        def parse(options : LibVlc::MediaParseFlag = LibVLc::MediaParseFlag::ParseLocal, timeout = 0)
+        def parse(options : Player::MediaParseFlag = Player::MediaParseFlag::ParseLocal, timeout = 0)
             LibVlc.parse_media_with_options @obj, options, timeout
         end
 
