@@ -174,6 +174,14 @@ module Player
             LibVlc.is_media_list_readonly? @obj
         end
 
+        def [](i : Int32) : Media
+            Media.new LibVlc.get_media_list_media(@obj,index)
+        end
+
+        def []=(i : Int32, media : Media) : Media
+            set i, media
+        end
+
         def get(): Media
             Media.new LibVlc.get_media_list_media(@obj)
         end
@@ -198,6 +206,11 @@ module Player
             LibVlc.set_media_list_media @obj, media.obj
         end
 
+        def set(index : Int32, media : Media)
+            remove index
+            insert media, index
+        end
+
 
         #Add
         def <<(media : Media) : Bool
@@ -220,6 +233,23 @@ module Player
             LibVlc.get_media_list_count(@obj)
         end
 
+
+        def size()
+            count
+        end
+
+        def each(&block)
+            count.times do |i|
+                yield get(i)
+            end
+        end
+
+        def each_with_index(&block)
+            count.times do |i|
+                yield get(i), i
+            end
+        end
+
         def >>(index) : Bool
             remove(index)
         end
@@ -236,6 +266,9 @@ module Player
             index = index_of(media)
             index == -1 || remove(index)
         end
+
+
+
 
         def finalize
             LibVlc.free_media_list @obj
