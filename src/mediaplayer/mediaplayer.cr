@@ -343,6 +343,22 @@ module Player
             end
         end
 
+        def play_media(media : Media)
+            if @mode == MediaPlayerMode::Single
+                raise "Not allowed when using MediaPlayerMode Single"
+            else
+                LibVlc.play_media_list_player_item @obj, media
+            end  
+        end
+
+        def play_index(index : Int32)
+            if @mode == MediaPlayerMode::Single
+                raise "Not allowed when using MediaPlayerMode Single"
+            else
+                LibVlc.play_media_list_player_index @obj, index
+            end  
+        end
+
         def pause(should_pause : Bool)
             option = should_pause ? 1 : 0
             if @mode == MediaPlayerMode::Single
